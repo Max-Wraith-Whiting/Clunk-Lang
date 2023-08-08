@@ -4,9 +4,9 @@
 # NAME :			Name of the output .exe (and the .o file directory).
 # SOURCE_DIR :		Source directory, where .c and .h files are to be found. 			
 
-NAME := CLunkD
+NAME := CLunk
 MODE := debug
-SOURCE_DIR := .
+SOURCE_DIR := ./src
 
 CFLAGS := -std=c99 -Wall -Werror
 
@@ -30,14 +30,18 @@ OBJECTS := $(addprefix $(BUILD_DIR)/$(NAME)/,$(notdir $(SOURCES:.c=.o)))
 
 # Linking
 build/$(NAME): $(OBJECTS)
-		@ printf "%8s %-40s %s\n" $(CC) $@ "$(CFLAGS)"
-		@ mkdir -p build
-		@ $(CC) $(CFLAGS) $^ -o $@
+	@printf "%8s %-40s %s\n" $(CC) $@ "$(CFLAGS)"
+	@mkdir -p build
+	@$(CC) $(CFLAGS) $^ -o $@
 
 # Compile .o files
 $(BUILD_DIR)/$(NAME)/%.o: $(SOURCE_DIR)/%.c $(HEADERS)
-	@ printf "%8s %-40s %s\n" $(CC) $< "$(CFLAGS)"
-	@ mkdir -p $(BUILD_DIR)/$(NAME)
-	@ $(CC) -c $(C_LANG) $(CFLAGS) -o $@ $<
+	@printf "%8s %-40s %s\n" $(CC) $< "$(CFLAGS)"
+	@mkdir -p $(BUILD_DIR)/$(NAME)
+	@$(CC) -c $(C_LANG) $(CFLAGS) -o $@ $<
 
 .PHONY: default
+
+clean:
+	@rm -rvf ./build
+	@echo "Build cleaned."
