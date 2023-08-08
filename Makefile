@@ -40,8 +40,16 @@ $(BUILD_DIR)/$(NAME)/%.o: $(SOURCE_DIR)/%.c $(HEADERS)
 	@mkdir -p $(BUILD_DIR)/$(NAME)
 	@$(CC) -c $(C_LANG) $(CFLAGS) -o $@ $<
 
-.PHONY: default
+.PHONY: default clean run
 
 clean:
 	@rm -rvf ./build
 	@echo "Build cleaned."
+
+run: $(BUILD_DIR)
+	@echo "------ Executing CLunk ------"
+	@./build/CLunk
+
+$(BUILD_DIR):
+	make
+
