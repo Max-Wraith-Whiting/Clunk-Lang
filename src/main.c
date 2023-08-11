@@ -21,6 +21,21 @@ static void repl() {
     }
 }
 
+static char* readFile(const char* path) {
+    FILE* file = fopen(path, "rb");
+    
+    fseek(file, 0L, SEEK_END); // Puts file pointer at the end of the file.
+    size_t fileSize = ftell(file); // Returns current position in the file (i.e. file size).
+    rewind(file); // Put the pointer at the beginning of the file.
+
+    char* buffer = (char*)malloc(fileSize + 1); // Allocate correct amount of memory for source code.
+    size_t bytesRead = fread(buffer, sizeof(char), fileSize, file); // Read the binary source from file.
+    buffer[bytesRead] = '\0'; // Add terminator at the end of the source code.
+
+    fclose(file);
+    return buffer;
+}
+
 static void runFile(const char* path) {
     char* source = readFile(path);
     InterpretResult result = interpret(source);
