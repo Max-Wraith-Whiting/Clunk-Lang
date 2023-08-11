@@ -31,6 +31,11 @@ static char peek() {
     return *scanner.current;
 }
 
+static char peekNext() {
+    if (isAtEnd()) return '\0';
+    return scanner.current[1];
+}
+
 static bool match(char expected) {
     if (isAtEnd()) return false;
     if (*scanner.current != expected) return false;
@@ -69,8 +74,16 @@ static void skipWhitespace() {
                 scanner.line++;
                 advance();
                 break;
+            case '/':
+                if (peekNext() == '/') {
+                    // Comments are line terminated.
+                    while (peek() != '\n' && !isAtEnd()) advance();
+                } else {
+                    return;
+                }
+                break;
             default:
-            return;
+                return;
         }
     }
 }
