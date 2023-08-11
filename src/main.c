@@ -23,13 +23,27 @@ static void repl() {
 
 static char* readFile(const char* path) {
     FILE* file = fopen(path, "rb");
+    if (file == NULL) {
+        fprintf(stderr, "Could not open file \"%s\".\n", path);
+        exit(74);
+    }
     
     fseek(file, 0L, SEEK_END); // Puts file pointer at the end of the file.
     size_t fileSize = ftell(file); // Returns current position in the file (i.e. file size).
     rewind(file); // Put the pointer at the beginning of the file.
 
     char* buffer = (char*)malloc(fileSize + 1); // Allocate correct amount of memory for source code.
+    if (buffer == NULL) {
+        fprintf(stderr, "Not enough memory to read \"%s\".\n", path);
+        exit(74);
+    }
+
     size_t bytesRead = fread(buffer, sizeof(char), fileSize, file); // Read the binary source from file.
+    if (bytesRead < fileSize) {
+        fprintf(stderr, "Could not read file \"%s\".\n", path);
+        exit(74);
+    }
+    
     buffer[bytesRead] = '\0'; // Add terminator at the end of the source code.
 
     fclose(file);
