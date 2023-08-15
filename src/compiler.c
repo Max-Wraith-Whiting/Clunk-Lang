@@ -77,8 +77,31 @@ static void emitReturn() {
     emitByte(OP_RETURN);
 }
 
+static uint8_t makeConstant(Value value) {
+    int constant = addConstant(currentChunk(), value);
+    if (constant > UINT8_MAX) {
+        error("Too many constants in one chunk.");
+        return 0;
+    }
+
+    return (uint8_t)constant;
+}
+
+static void emitConstant(Value value) {
+    emitByte(OP_CONSTANT, makeConstant(value));
+}
+
 static void endCompiler() {
     emitReturn();
+}
+
+static void number() {
+    double value = strtod(parser.previous.start, NULL);
+    emitConstant(value);
+}
+
+static void expression() {
+
 }
 
 bool compile(const char* source, Chunk* chunk) {
@@ -90,7 +113,7 @@ bool compile(const char* source, Chunk* chunk) {
 
     advance();
     expression();
-    consume(TOKEN_EOF, "Expect end of expressin.");
+    consume(TOKEN_EOF, "Expect end of expression.");
 
     endCompiler();
     return !parser.hadError;
