@@ -15,7 +15,7 @@ static void resetStack() {
 static void runtimeError(const char* format, ...) {
     va_list args;
     va_start(args, format);
-    vfprint(stderr, format, args);
+    vfprintf(stderr, format, args);
     va_end(args);
     fputs("\n", stderr);
 
@@ -50,15 +50,15 @@ static Value peek(int distance) {
 static InterpretResult run() {
     #define READ_BYTE() (*vm.ip++)
     #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
-    #define BINARY_OP(valueType, op) \
+    #define BINARY_OP(ValueType, op) \
         do { \
-            if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) {
+            if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) { \
                 runtimeError("Operands must be numbers."); \
                 return INTERPRET_RUNTIME_ERROR; \
             } \
             double b = AS_NUMBER(pop()); \
             double a = AS_NUMBER(pop()); \
-            push(valueType(a op b)); \
+            push(ValueType(a op b)); \
         } while (false)
 
     for (;;) {
