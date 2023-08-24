@@ -143,6 +143,16 @@ static void binary() {
         default: return; // Should be unreachable.
     }
 }
+
+static void literal() {
+    switch (parser.previous.type) {
+        case TOKEN_FALSE: emitByte(OP_FALSE); break;
+        case TOKEN_NIL:   emitByte(OP_NIL); break;
+        case TOKEN_TRUE:  emitByte(OP_TRUE); break;
+        default: return; // Should be unreachable.
+    }
+}
+
 static void grouping() {
     expression();
     consume(TOKEN_RIGHT_PAREN, "Expect ')' after expression.");
