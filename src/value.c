@@ -33,6 +33,7 @@ void printValue(Value value) {
         case VAL_NIL: printf("nil"); break;
         case VAL_NUMBER: printf("%g", AS_NUMBER(value)); break;
     }
+}
 
 bool valuesEqual(Value a, Value b) {
     if (a.type != b.type) return false;
@@ -41,6 +42,5 @@ bool valuesEqual(Value a, Value b) {
         case VAL_NIL:     return true;
         case VAL_NUMBER:  return AS_NUMBER(a) == AS_NUMBER(b);
         default:          return false; // Unreachable hopefully.
-    }
     }
 }
