@@ -11,6 +11,7 @@ typedef struct {
     uint8_t* ip;
     Value stack[STACK_MAX];
     Value* stackTop;
+    Obj* objects; // Points to the top of Obj linked list.
 } VM;
 
 typedef enum {
