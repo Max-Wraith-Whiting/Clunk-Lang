@@ -5,14 +5,16 @@
 #include "value.h"
 
 typedef struct {
+    ObjString* key;
+    Value value;
+} Entry;
+
+void initTable(Table* table);
+
+typedef struct {
     int count;
     int capacity;
     Entry* entries;
 } Table;
-
-typedef struct {
-    ObjString* key;
-    Value value;
-} Entry;
 
 #endif
