@@ -10,4 +10,9 @@ typedef struct {
     Entry* entries;
 } Table;
 
+typedef struct {
+    ObjString* key;
+    Value value;
+} Entry;
+
 #endif
