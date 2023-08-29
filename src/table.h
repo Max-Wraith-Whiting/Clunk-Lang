@@ -9,12 +9,13 @@ typedef struct {
     Value value;
 } Entry;
 
-void initTable(Table* table);
-
 typedef struct {
     int count;
     int capacity;
     Entry* entries;
 } Table;
+
+void initTable(Table* table);
+void freeTable(Table* table);
 
 #endif
