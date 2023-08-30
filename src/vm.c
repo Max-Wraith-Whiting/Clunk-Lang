@@ -147,8 +147,7 @@ static InterpretResult run() {
                 break;
             }
             case OP_RETURN: {
-                printValue(pop());
-                printf("\n");
+                // Exit interpreter.
                 return INTERPRET_OK;
             }
         }
