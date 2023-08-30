@@ -100,13 +100,13 @@ bool tableDelete(Table* table, ObjString* key) {
     // Place a tombstone in the entry.
     entry->key = NULL;
     entry->value = BOOL_VAL(true);
-    return true;-
+    return true;
 }
 
 void tableAddAll(Table* from, Table* to) {
     for (int i = 0; i < from->capacity; i++) {
         Entry* entry = &from->entries[i];
-        if (entry-> != NULL) {
+        if (entry->key != NULL) {
             tableSet(to, entry->key, entry->value);
         }
     }
