@@ -76,6 +76,7 @@ static void concatenate() {
 static InterpretResult run() {
     #define READ_BYTE() (*vm.ip++)
     #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
+    #define READ_STRING() AS_STRING(READ_CONSTANT())
     #define BINARY_OP(ValueType, op) \
         do { \
             if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) { \
@@ -161,6 +162,7 @@ static InterpretResult run() {
     }
     #undef READ_BYTE
     #undef READ_CONSTANT
+    #undef READ_STRING
     #undef BINARY_OP
 }
 
