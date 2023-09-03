@@ -198,10 +198,10 @@ static void string() {
     emitConstant(OBJ_VAL(copyString(parser.previous.start + 1, parser.previous.length - 2)));
 }
 
-static void namedVariable(Token name) {
+static void namedVariable(Token name, bool canAssign) {
     uint8_t arg = identifierConstant(&name);
 
-    if (match(TOKEN_EQUAL)) {
+    if (canAssign && match(TOKEN_EQUAL)) {
         expression();
         emitBytes(OP_SET_GLOBAL, arg);
     } else {
@@ -209,8 +209,8 @@ static void namedVariable(Token name) {
     }
 }
 
-static void variable() {
-    namedVariable(parser.previous);
+static void variable(vool canAssign) {
+    namedVariable(parser.previous, canAssign);
 }
 
 static void unary() {
@@ -277,12 +277,17 @@ static void parsePrecedence(Precedence precedence) {
         return;
     }
 
-    prefixRule();
+    bool canAssign = precedence <= PREC_ASSIGNMENT;
+    prefixRule(canAssign);
 
     while (precedence <= getRule(parser.current.type)->precedence) {
         advance();
         ParseFn infixRule = getRule(parser.previous.type)->infix;
         infixRule();
+    }
+
+    if (canAssign && match(TOKEN_EQUAL)) {
+        error("Invalid assignment target.");
     }
 }
 
