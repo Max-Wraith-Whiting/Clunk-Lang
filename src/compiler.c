@@ -38,7 +38,19 @@ typedef struct {
     Precedence precedence;
 } ParseRule;
 
+typedef struct {
+    Token name;
+    int depth;
+} Local;
+
+typedef struct {
+    Local locals[UINT8_COUNT];
+    int localCount;
+    int scopeDepth;
+} Compiler;
+
 Parser parser;
+Compiler* current = NULL;
 Chunk* compilingChunk;
 
 static Chunk* currentChunk() {
@@ -127,6 +139,12 @@ static void emitConstant(Value value) {
     emitBytes(OP_CONSTANT, makeConstant(value));
 }
 
+static void intiCompiler(Compiler* compiler) {
+    compiler->localCount = 0;
+    compiler->scopeDepth = 0;
+    current = compiler;
+}
+
 static void endCompiler() {
     emitReturn();
     #ifdef DEBUG_PRINT_CODE
@@ -209,7 +227,7 @@ static void namedVariable(Token name, bool canAssign) {
     }
 }
 
-static void variable(vool canAssign) {
+static void variable(bool canAssign) {
     namedVariable(parser.previous, canAssign);
 }
 
@@ -365,6 +383,8 @@ static void statement() {
 
 bool compile(const char* source, Chunk* chunk) {
     initScanner(source);
+    Compiler compiler;
+    intiCompiler(&compiler);
     compilingChunk = chunk;
 
     parser.hadError = false;
