@@ -19,6 +19,13 @@ struct Obj {
     struct Obj* next;
 };
 
+typedef struct {
+    Obj obj;
+    int arity;
+    Chunk chunk;
+    ObjString* name;
+} ObjFunction;
+
 struct ObjString {
     Obj obj;
     int length;
