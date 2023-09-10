@@ -620,7 +620,7 @@ static void statement() {
 bool compile(const char* source, Chunk* chunk) {
     initScanner(source);
     Compiler compiler;
-    intiCompiler(&compiler);
+    initCompiler(&compiler);
     compilingChunk = chunk;
 
     parser.hadError = false;
