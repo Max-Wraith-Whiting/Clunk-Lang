@@ -1,6 +1,7 @@
 #ifndef clunk_vm_h
 #define clunk_vm_h
 
+#include "object.h"
 #include "chunk.h"
 #include "table.h"
 #include "value.h"
