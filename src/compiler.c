@@ -462,7 +462,7 @@ static void parsePrecedence(Precedence precedence) {
     }
 }
 
-static ParseRule* getRule(TokenType type) 
+static ParseRule* getRule(TokenType type) { 
     return &rules[type];
 }
 
