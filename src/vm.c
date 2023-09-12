@@ -103,7 +103,8 @@ static InterpretResult run() {
                 printf(" ]");
             }
             printf("\n");
-            disassembleInstruction(&frame->function->chunk, (int)(frame->ip - frame->function->chunk.code));
+            disassembleInstruction(&frame->function->chunk,
+                (int)(frame->ip - frame->function->chunk.code));
         #endif
 
         uint8_t instruction;
@@ -218,19 +219,14 @@ static InterpretResult run() {
 }
 
 InterpretResult interpret(const char* source) {
-    Chunk chunk;
-    initChunk(&chunk);
+    ObjFunction* function = compile(source);
+    if (function == NULL) return INTERPRET_COMPILE_ERROR;
 
-    if (!compile(source, &chunk)) {
-        freeChunk(&chunk);
-        return INTERPRET_COMPILE_ERROR;
-    }
+    push(OBJ_VAL(function));
+    CallFrame* frame = &vm.frames[vm.frameCount++];
+    frame->function = function;
+    frame->ip = function->chunck.code;
+    frame->slots = vm.stack;
 
-    vm.chunk = &chunk;
-    vm.ip = vm.chunk->code;
-
-    InterpretResult result = run();
-
-    freeChunk(&chunk);
-    return result;
+    return run();
 }
