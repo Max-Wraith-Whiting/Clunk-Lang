@@ -129,7 +129,7 @@ static void emitBytes(uint8_t byte1, uint8_t byte2) {
     emitByte(byte2);
 }
 
-staic void emitLoop(int loopStart) {
+static void emitLoop(int loopStart) {
     emitByte(OP_LOOP);
 
     int offset = currentChunk()->count - loopStart + 2;
