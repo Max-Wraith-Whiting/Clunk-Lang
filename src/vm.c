@@ -25,7 +25,7 @@ static void runtimeError(const char* format, ...) {
 
     CallFrame* frame = &vm.frames[vm.frameCount - 1];
     size_t instruction = frame->ip - frame->function->chunk.code - 1;
-    int line = frame->function->chunck.lines[instruction];
+    int line = frame->function->chunk.lines[instruction];
     fprintf(stderr, "[line %d] in script\n", line);
     resetStack();
 }
@@ -226,7 +226,7 @@ InterpretResult interpret(const char* source) {
     push(OBJ_VAL(function));
     CallFrame* frame = &vm.frames[vm.frameCount++];
     frame->function = function;
-    frame->ip = function->chunck.code;
+    frame->ip = function->chunk.code;
     frame->slots = vm.stack;
 
     return run();
