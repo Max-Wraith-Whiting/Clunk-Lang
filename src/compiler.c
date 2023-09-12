@@ -628,7 +628,7 @@ static void statement() {
     }
 }
 
-bool compile(const char* source) {
+ObjFunction* compile(const char* source) {
     initScanner(source);
     Compiler compiler;
     initCompiler(&compiler, TYPE_SCRIPT);
