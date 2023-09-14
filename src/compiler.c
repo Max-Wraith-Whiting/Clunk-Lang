@@ -178,6 +178,7 @@ static void patchJump(int offset) {
 }
 
 static void initCompiler(Compiler* compiler, FunctionType type) {
+    compiler->enclosing = current;
     compiler->function = NULL;
     compiler->type = type;
     compiler->localCount = 0;
@@ -200,6 +201,8 @@ static ObjFunction* endCompiler() {
              ? function->name->chars : "<script>");
         }
     #endif
+
+    current = current->enclosing;
     return function;
 }
 
