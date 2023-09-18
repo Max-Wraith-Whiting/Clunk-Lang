@@ -309,6 +309,9 @@ static uint8_t argumentList() {
     if (!check(TOKEN_RIGHT_PAREN)) {
         do {
             expression();
+            if (argCount == 255) {
+                error("Can't have more than 255 arguments.");
+            }
             argCount++;
         } while (match(TOKEN_COMMA));
     }
