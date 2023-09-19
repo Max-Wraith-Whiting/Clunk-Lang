@@ -4,3 +4,6 @@ A simple byte-code interpreter written in C for the Lunk language. *(The name Cl
 The compiler is a single pass compiler, electing to avoid an intermediate form (AST or what have you).
 
 This is based on the book, [Crafting Interpreters](https://craftinginterpreters.com/), by Robert Nystrom.
+
+# Installation
+Simply download the repo and use the **make** utility to build the project.
