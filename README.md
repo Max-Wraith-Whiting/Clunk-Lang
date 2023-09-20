@@ -7,3 +7,6 @@ This is based on the book, [Crafting Interpreters](https://craftinginterpreters.
 
 # Installation
 Simply download the repo and use the **make** utility to build the project.
+
+# Using the Compiler
+Running the CLunk executable without a Lunk source file as an argument will open the REPL enviroment of CLunk. To load a Lunk script, just specify the file after the CLunk executable.
