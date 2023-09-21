@@ -31,7 +31,7 @@ static void runtimeError(const char* format, ...) {
         if (function->name == NULL) {
             fprintf(stderr, "script\n");
         } else {
-            fprintf(stderr, "%s()\n" function->name->chars);
+            fprintf(stderr, "%s()\n", function->name->chars);
         }
     }
     
@@ -78,7 +78,7 @@ static bool call(ObjFunction* function, int argCount) {
 
     CallFrame* frame = &vm.frames[vm.frameCount++];
     frame->function = function;
-    frame->ip = function->chuck.code;
+    frame->ip = function->chunk.code;
     frame->slots = vm.stackTop - argCount - 1;
     return true;
 }
