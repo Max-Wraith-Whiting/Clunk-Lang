@@ -57,6 +57,14 @@ static Value peek(int distance) {
     return vm.stackTop[-1 - distance];
 }
 
+static bool call(ObjFunction* function, int argCount) {
+    CallFrame* frame = &vm.frames[vm.frameCount++];
+    frame->function = function;
+    frame->ip = function->chuck.code;
+    frame->slots = vm.stackTop - argCount - 1;
+    return true;
+}
+
 static bool callValue(Value callee, int argCount) {
     if (IS_OBJ(callee)) {
         switch (OBJ_TYPE(callee)) {
