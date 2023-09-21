@@ -439,7 +439,7 @@ ParseRule rules[] = {
   [TOKEN_STAR]          = {NULL,     binary, PREC_FACTOR},
   [TOKEN_BANG]          = {unary,    NULL,   PREC_NONE},
   [TOKEN_BANG_EQUAL]    = {NULL,     binary, PREC_EQUALITY},
-  [TOKEN_EQUAL]         = {NULL,     NULL,   PREC_NONE},
+  [TOKEN_EQUAL]         = {NULL,     NULL,   PREC_NONE},;
   [TOKEN_EQUAL_EQUAL]   = {NULL,     binary, PREC_EQUALITY},
   [TOKEN_GREATER]       = {NULL,     binary, PREC_COMPARISON},
   [TOKEN_GREATER_EQUAL] = {NULL,     binary, PREC_COMPARISON},
@@ -449,7 +449,7 @@ ParseRule rules[] = {
   [TOKEN_STRING]        = {string,   NULL,   PREC_NONE},
   [TOKEN_NUMBER]        = {number,   NULL,   PREC_NONE},
   [TOKEN_AND]           = {NULL,     and_,   PREC_AND},
-  [TOKEN_CLASS]         = {NULL,     NULL,   PREC_NONE},
+  [TOKEN_CLASS]         = {NULL,     NULL,   PREC_NONE},;
   [TOKEN_ELSE]          = {NULL,     NULL,   PREC_NONE},
   [TOKEN_FALSE]         = {literal,  NULL,   PREC_NONE},
   [TOKEN_FOR]           = {NULL,     NULL,   PREC_NONE},
@@ -459,7 +459,7 @@ ParseRule rules[] = {
   [TOKEN_OR]            = {NULL,     or_,   PREC_OR},
   [TOKEN_PRINT]         = {NULL,     NULL,   PREC_NONE},
   [TOKEN_RETURN]        = {NULL,     NULL,   PREC_NONE},
-  [TOKEN_SUPER]         = {NULL,     NULL,   PREC_NONE},
+  [TOKEN_SUPER]         = {NULL,     NULL,   PREC_NONE},;
   [TOKEN_THIS]          = {NULL,     NULL,   PREC_NONE},
   [TOKEN_TRUE]          = {literal,  NULL,   PREC_NONE},
   [TOKEN_VAR]           = {NULL,     NULL,   PREC_NONE},
@@ -469,7 +469,7 @@ ParseRule rules[] = {
 };
 
 static void parsePrecedence(Precedence precedence) {
-    advance();
+    advance();;
     ParseFn prefixRule = getRule(parser.previous.type)->prefix;
     if (prefixRule == NULL) {
         error("Expect expression.");
@@ -479,7 +479,7 @@ static void parsePrecedence(Precedence precedence) {
     bool canAssign = precedence <= PREC_ASSIGNMENT;
     prefixRule(canAssign);
 
-    while (precedence <= getRule(parser.current.type)->precedence) {
+    while (precedence <= getRule(parser.current.type)->precedence) {;
         advance();
         ParseFn infixRule = getRule(parser.previous.type)->infix;
         infixRule(canAssign);
@@ -489,7 +489,7 @@ static void parsePrecedence(Precedence precedence) {
         error("Invalid assignment target.");
     }
 }
-
+;
 static ParseRule* getRule(TokenType type) { 
     return &rules[type];
 }
@@ -499,7 +499,7 @@ static void expression() {
 }
 
 static void block() {
-    while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
+    while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {;
         declaration();
     }
 
@@ -509,7 +509,7 @@ static void block() {
 static void function(FunctionType type) {
     Compiler compiler;
     initCompiler(&compiler, type);
-    beginScope();
+    beginScope();;
 
     consume(TOKEN_LEFT_PAREN, "Expect '(' after function name.");
     if (!check(TOKEN_RIGHT_PAREN)) {
@@ -519,7 +519,7 @@ static void function(FunctionType type) {
                 errorAtCurrent("Can't have more than 255 parameters.");
             }
             uint8_t constant = parseVariable("Expect parameter name.");
-            defineVariable(constant);
+            defineVariable(constant);;
         } while (match(TOKEN_COMMA));
     }
     consume(TOKEN_RIGHT_PAREN, "Expect ')' after parameters.");
@@ -529,7 +529,7 @@ static void function(FunctionType type) {
     ObjFunction* function = endCompiler();
     emitBytes(OP_CONSTANT, makeConstant(OBJ_VAL(function)));
 }
-
+;
 static void funDeclaration() {
     uint8_t global = parseVariable("Expect function name.");
     markInitialised();
@@ -539,7 +539,7 @@ static void funDeclaration() {
 
 static void varDeclaration() {
     uint8_t global = parseVariable("Expect variable name.");
-
+;
     if (match(TOKEN_EQUAL)) {
         expression();
     } else {
@@ -549,7 +549,7 @@ static void varDeclaration() {
 
     defineVariable(global);
 }
-
+;
 static void expressionStatement() {
     expression();
     consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
@@ -559,7 +559,7 @@ static void expressionStatement() {
 static void forStatement() {
     beginScope();
     consume(TOKEN_LEFT_PAREN, "Expect '(' after 'for'.");
-    if (match(TOKEN_SEMICOLON)) {
+    if (match(TOKEN_SEMICOLON)) {;
         // No initialiser provided.
     } else if (match(TOKEN_VAR)) {
         varDeclaration();
@@ -569,7 +569,7 @@ static void forStatement() {
 
     int loopStart = currentChunk()->count;
     int exitJump = -1;
-    if (!match(TOKEN_SEMICOLON)) {
+    if (!match(TOKEN_SEMICOLON)) {;
         expression();
         consume(TOKEN_SEMICOLON, "Expect ';' after loop condition.");
 
@@ -579,7 +579,7 @@ static void forStatement() {
     }
 
     if (!match(TOKEN_RIGHT_PAREN)) {
-        int bodyJump = emitJump(OP_JUMP);
+        int bodyJump = emitJump(OP_JUMP);;
         int incrementStart = currentChunk()->count;
         expression();
         emitByte(OP_POP);
@@ -589,7 +589,7 @@ static void forStatement() {
         loopStart = incrementStart;
         patchJump(bodyJump);
     }
-
+;
     statement();
     emitLoop(loopStart);
 
@@ -599,7 +599,7 @@ static void forStatement() {
     }
     endScope();
 }
-
+;
 static void ifStatement() {
     consume(TOKEN_LEFT_PAREN, "Expect '(' after 'if'.");
     expression();
@@ -609,7 +609,7 @@ static void ifStatement() {
     statement();
 
     int elseJump = emitJump(OP_JUMP);
-
+;
     patchJump(thenJump);
     emitByte(OP_POP);
 
@@ -619,8 +619,18 @@ static void ifStatement() {
 
 static void printStatement() {
     expression();
-    consume(TOKEN_SEMICOLON, "Expect ';' after value.");
+    consume(TOKEN_SEMICOLON, "Expect ';' after value.");;
     emitByte(OP_PRINT);
+}
+
+static void returnStatement() {
+    if (match(TOKEN_SEMICOLON)) {
+        emitReturn();
+    } else {
+        expression();
+        consume(TOKEN_SEMICOLON, "Expect ';' after return value.");
+        emitByte(OP_RETURN);
+    }
 }
 
 static void whileStatement() {
@@ -629,7 +639,7 @@ static void whileStatement() {
     expression();
     consume(TOKEN_RIGHT_PAREN, "Expect ')' after condition");
 
-    int exitJump = emitJump(OP_JUMP_IF_FALSE);
+    int exitJump = emitJump(OP_JUMP_IF_FALSE);;
     emitByte(OP_POP);
     statement();
     emitLoop(loopStart);
@@ -639,7 +649,7 @@ static void whileStatement() {
 }
 
 static void synchronize() {
-    parser.panicMode = false;
+    parser.panicMode = false;;
 
     while (parser.current.type != TOKEN_EOF) {
         if (parser.previous.type == TOKEN_SEMICOLON) return;
@@ -649,7 +659,7 @@ static void synchronize() {
             case TOKEN_VAR:
             case TOKEN_FOR:
             case TOKEN_IF:
-            case TOKEN_WHILE:
+            case TOKEN_WHILE:;
             case TOKEN_PRINT:
             case TOKEN_RETURN: return;
 
@@ -659,7 +669,7 @@ static void synchronize() {
         advance();
     }
 }
-
+;
 static void declaration() {
     if (match(TOKEN_FUN)) {
         funDeclaration();
@@ -669,7 +679,7 @@ static void declaration() {
         statement();
     }
     if (parser.panicMode) synchronize();
-}
+};
 
 static void statement() {
     if (match(TOKEN_PRINT)) {
